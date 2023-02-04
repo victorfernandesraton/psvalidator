@@ -2,8 +2,12 @@ package domain
 
 import "regexp"
 
-const lowerCaseRegex = "[a-z]"
-const upperCaseRegex = "[A-Z]"
+const (
+	lowerCaseRegex        = "[a-z]"
+	upperCaseRegex        = "[A-Z]"
+	digitCharacterRegex   = "[0-9]"
+	specialCharacterRegex = "[^[A-Za-zÀ-ȕ\\d\\s]"
+)
 
 func MinSize(s string, min int) bool {
 	return len(s) >= min
@@ -30,4 +34,10 @@ func MinUpperCase(s string, min int) (bool, error) {
 }
 func MinLowerCase(s string, min int) (bool, error) {
 	return minCase(s, lowerCaseRegex, min)
+}
+func MinDigit(s string, min int) (bool, error) {
+	return minCase(s, digitCharacterRegex, min)
+}
+func MinSpecialChars(s string, min int) (bool, error) {
+	return minCase(s, specialCharacterRegex, min)
 }
