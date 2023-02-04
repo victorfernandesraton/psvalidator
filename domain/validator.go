@@ -1,6 +1,8 @@
 package domain
 
-import "regexp"
+import (
+	"regexp"
+)
 
 const (
 	lowerCaseRegex        = "[a-z]"
@@ -40,4 +42,16 @@ func MinDigit(s string, min int) (bool, error) {
 }
 func MinSpecialChars(s string, min int) (bool, error) {
 	return minCase(s, specialCharacterRegex, min)
+}
+
+func NoRepeat(s string) bool {
+	data := []byte(s)
+	for i := 0; i < len(data); i++ {
+		if i > 0 {
+			if data[i] == data[i-1] {
+				return false
+			}
+		}
+	}
+	return true
 }

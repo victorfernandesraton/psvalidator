@@ -150,3 +150,26 @@ func TestSpecialChars(t *testing.T) {
 		})
 	}
 }
+
+func TestNoRepeat(t *testing.T) {
+
+	cases := []struct {
+		desc, text string
+		result     bool
+		err        error
+	}{
+		{desc: "String with not sequential repetition", text: "aba123", result: true, err: nil},
+		{desc: "String with with 1 sequential repetition", text: "aab123", result: false, err: nil},
+		{desc: "String with with 3 sequential repetition", text: "abaabcbc1123", result: false, err: nil},
+		{desc: "empty string", text: "", result: true, err: nil},
+	}
+
+	for _, t1 := range cases {
+		t.Run(t1.desc, func(t *testing.T) {
+			result := domain.NoRepeat(t1.text)
+			if result != t1.result {
+				t.Fatalf("expect %v , got %v", t1.result, result)
+			}
+		})
+	}
+}
