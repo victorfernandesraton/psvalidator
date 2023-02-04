@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-var stub *command.VerifyPasswordCommand = &command.VerifyPasswordCommand{}
+var stub = &command.VerifyPasswordCommand{}
 
 func TestVerifyPasswordCommand_Execute(t *testing.T) {
 	var cases = []struct {
