@@ -1,57 +1,72 @@
 package domain
 
 import (
+	"errors"
 	"regexp"
 )
 
-const (
-	lowerCaseRegex        = "[a-z]"
-	upperCaseRegex        = "[A-Z]"
-	digitCharacterRegex   = "[0-9]"
-	specialCharacterRegex = "[^[A-Za-zÀ-ȕ\\d\\s]"
+var (
+	LoweError             = errors.New("not valid minimun lowercase rule")
+	UpperError            = errors.New("not valid minimun uppercase rule")
+	DigitError            = errors.New("not valid minimun digit rule")
+	SpecialCharacterError = errors.New("not valid minimun special character rule")
+	SizeError             = errors.New("not valid minimun size rule")
+	RepeatError           = errors.New("not valid repeat rule")
 )
 
-func MinSize(s string, min int) bool {
-	return len(s) >= min
-}
-
-func removePerCase(s string, regexp *regexp.Regexp) int {
-	replacedString := regexp.FindAllStringSubmatch(s, -1)
-	return len(replacedString)
-}
-
-func minCase(s, exp string, min int) (bool, error) {
-	regex, err := regexp.Compile(exp)
-	if err != nil {
-		return false, err
+func MinSize(s string, min int) error {
+	if len(s) < min {
+		return SizeError
 	}
-
-	result := removePerCase(s, regex)
-
-	return result >= min, nil
+	return nil
 }
 
-func MinUpperCase(s string, min int) (bool, error) {
-	return minCase(s, upperCaseRegex, min)
-}
-func MinLowerCase(s string, min int) (bool, error) {
-	return minCase(s, lowerCaseRegex, min)
-}
-func MinDigit(s string, min int) (bool, error) {
-	return minCase(s, digitCharacterRegex, min)
-}
-func MinSpecialChars(s string, min int) (bool, error) {
-	return minCase(s, specialCharacterRegex, min)
+func minCase(s string, rule *Rule) error {
+	regex, err := regexp.Compile(RuleRegexp[rule.Type])
+	if err != nil {
+		return err
+	}
+	matches := regex.FindAllStringSubmatch(s, -1)
+
+	if len(matches) < rule.Value {
+		return RuleErrors[rule.Type]
+	}
+	return nil
 }
 
-func NoRepeat(s string) bool {
+func MinUpperCase(s string, min int) error {
+	return minCase(s, &Rule{
+		Type:  UpperRule,
+		Value: min,
+	})
+}
+func MinLowerCase(s string, min int) error {
+	return minCase(s, &Rule{
+		Type:  LowerRule,
+		Value: min,
+	})
+}
+func MinDigit(s string, min int) error {
+	return minCase(s, &Rule{
+		Type:  DigitRule,
+		Value: min,
+	})
+}
+func MinSpecialChars(s string, min int) error {
+	return minCase(s, &Rule{
+		Type:  SpecialRule,
+		Value: min,
+	})
+}
+
+func NoRepeat(s string) error {
 	data := []byte(s)
 	for i := 0; i < len(data); i++ {
 		if i > 0 {
 			if data[i] == data[i-1] {
-				return false
+				return RepeatError
 			}
 		}
 	}
-	return true
+	return nil
 }
