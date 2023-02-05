@@ -50,7 +50,11 @@ func (ctr *VerifyHttpController) Handler(c echo.Context) error {
 		Rules:    rules,
 	})
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err)
+		statusCode := http.StatusInternalServerError
+		if err == command.NotValidRuleError {
+			statusCode = http.StatusBadRequest
+		}
+		return echo.NewHTTPError(statusCode, err)
 	}
 
 	return c.JSON(http.StatusOK, res)
