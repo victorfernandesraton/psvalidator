@@ -108,6 +108,24 @@ func TestVerifyPasswordCommand_Execute(t *testing.T) {
 				NoMatch: []domain.RuleEnum{domain.DigitRule, domain.RepeatRule},
 			},
 		},
+		{
+			desc: "Validate error with invalid rulw",
+			params: command.VerifyPasswordCommandParams{
+				Password: "testeSeenhaForte!123&",
+				Rules: []*domain.Rule{
+					{
+						Type:  "invalidRule",
+						Value: 8,
+					},
+					{
+						Type:  domain.DigitRule,
+						Value: 4,
+					},
+				},
+			},
+			res: nil,
+			err: command.NotValidRuleError,
+		},
 	}
 	for _, t1 := range cases {
 		t.Run(t1.desc, func(t *testing.T) {
@@ -115,11 +133,13 @@ func TestVerifyPasswordCommand_Execute(t *testing.T) {
 			if err != t1.err {
 				t.Fatalf("expect %v , got %v", t1.err, err)
 			}
-			if res.Verify != t1.res.Verify {
-				t.Fatalf("expect %v , got %v", t1.res.Verify, res.Verify)
-			}
-			if len(t1.res.NoMatch) != len(res.NoMatch) {
-				t.Fatalf("expect size list no match%v , got %v", t1.res.NoMatch, res.NoMatch)
+			if t1.res != nil {
+				if res.Verify != t1.res.Verify {
+					t.Fatalf("expect %v , got %v", t1.res.Verify, res.Verify)
+				}
+				if len(t1.res.NoMatch) != len(res.NoMatch) {
+					t.Fatalf("expect size list no match%v , got %v", t1.res.NoMatch, res.NoMatch)
+				}
 			}
 		})
 	}
