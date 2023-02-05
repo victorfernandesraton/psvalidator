@@ -2,7 +2,7 @@ package command
 
 import (
 	"errors"
-	"psvalidator/domain"
+	"github.com/victorfernandesraton/psvalidator/domain"
 )
 
 var NotValidRuleError = errors.New("not valid rule")

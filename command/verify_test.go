@@ -1,8 +1,8 @@
 package command_test
 
 import (
-	"psvalidator/command"
-	"psvalidator/domain"
+	"github.com/victorfernandesraton/psvalidator/command"
+	"github.com/victorfernandesraton/psvalidator/domain"
 	"testing"
 )
 

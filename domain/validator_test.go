@@ -1,7 +1,7 @@
 package domain_test
 
 import (
-	"psvalidator/domain"
+	"github.com/victorfernandesraton/psvalidator/domain"
 	"testing"
 )
 
