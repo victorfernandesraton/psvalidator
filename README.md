@@ -1,5 +1,5 @@
 # psvalidator
-Projeto no qual é implementado um validador de senha conforme requisitos informados no [LINK DO ARQUIVO]
+Projeto no qual é implementado um validador de senha conforme requisitos informados
 
 ## Arquitetura
 Projeto foi implementado conforme os principios de SOLID, seguindo como base o Pattern CQRS, o qual separa a leitrua de escrita de dados, assim temos as seguintes camadas
