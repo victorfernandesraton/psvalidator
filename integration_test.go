@@ -7,6 +7,7 @@ import (
 	"github.com/victorfernandesraton/psvalidator/infra"
 	"net/http"
 	"net/http/httptest"
+	"sort"
 	"strings"
 	"testing"
 )
@@ -98,44 +99,75 @@ func TestWithSucessValidPass(t *testing.T) {
 
 func TestWithErrorValidPass(t *testing.T) {
 
-	expect := struct {
-		err        error
-		result     *command.VerifyPasswordCommandResponse
-		statusCode int
+	cmd := &command.VerifyPasswordCommand{}
+	e := echo.New()
+
+	cases := []struct {
+		body    string
+		desc    string
+		moMatch []string
 	}{
-		statusCode: http.StatusOK,
-		result: &command.VerifyPasswordCommandResponse{
-			Verify:  false,
-			NoMatch: []string{"minSize"},
+		{
+			desc: "invalid min size",
+			body: `{ 
+				"password": "!1234&", 
+				"rules": [ 
+					{ "rule": "minDigit", "value": 4 },
+					{"rule": "minSize","value": 8} 
+				] 
+			}`,
+			moMatch: []string{"minSize"},
+		},
+		{
+			desc: "invalid min size and mindigit",
+			body: `{ 
+				"password": "!1234&", 
+				"rules": [ 
+					{ "rule": "minDigit", "value": 5 },
+					{"rule": "minSize","value": 8} 
+				] 
+			}`,
+			moMatch: []string{"minSize", "minDigit"},
 		},
 	}
 
-	cmd := &command.VerifyPasswordCommand{}
-	bodyJSON := `{ "password": "!1234&", "rules": [ { "rule": "minDigit", "value": 4 }, {"rule": "minSize","value": 8} ] }`
+	for _, t1 := range cases {
+		t.Run(t1.desc, func(t *testing.T) {
+			req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(t1.body))
+			req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+			rec := httptest.NewRecorder()
+			c := e.NewContext(req, rec)
+			h := &infra.VerifyHttpController{
+				VerifyCommand: cmd,
+			}
 
-	e := echo.New()
-	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(bodyJSON))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-	h := &infra.VerifyHttpController{
-		VerifyCommand: cmd,
-	}
+			err := h.Handler(c)
 
-	err := h.Handler(c)
+			if err != nil {
+				t.Fatalf("expect %v, got %v", nil, err)
+			}
+			response := new(command.VerifyPasswordCommandResponse)
+			if err := json.Unmarshal(rec.Body.Bytes(), response); err != nil {
+				t.Fatalf("malformed body response")
+			}
+			if rec.Code != http.StatusOK {
+				t.Fatalf("expect %v, got %v", http.StatusOK, rec.Code)
+			}
 
-	if err != expect.err {
-		t.Fatalf("expect %v, got %v", expect.err, err)
-	}
-	response := new(command.VerifyPasswordCommandResponse)
-	if err := json.Unmarshal(rec.Body.Bytes(), response); err != nil {
-		t.Fatalf("malformed body response")
-	}
-	if rec.Code != expect.statusCode {
-		t.Fatalf("expect %v, got %v", expect.statusCode, rec.Code)
-	}
-
-	if response.Verify != expect.result.Verify {
-		t.Fatalf("expect %v, got %v", expect.result, response)
+			if response.Verify {
+				t.Fatalf("expect %v, got %v", false, response)
+			}
+			if len(response.NoMatch) != len(t1.moMatch) {
+				t.Fatalf("different size list expect %v, got %v", t1.moMatch, response.NoMatch)
+			}
+			for _, match := range response.NoMatch {
+				findIndex := sort.Search(len(t1.moMatch), func(i int) bool {
+					return t1.moMatch[i] == match
+				})
+				if findIndex > len(t1.moMatch) {
+					t.Fatalf("not found %v in %v", match, t1.moMatch)
+				}
+			}
+		})
 	}
 }
