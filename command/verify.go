@@ -16,12 +16,12 @@ type VerifyPasswordCommandParams struct {
 }
 
 type VerifyPasswordCommandResponse struct {
-	Verify  bool
-	NoMatch []string
+	Verify  bool     `json:"verify"`
+	NoMatch []string `json:"noMatch"`
 }
 
 func (c *VerifyPasswordCommand) Execute(params VerifyPasswordCommandParams) (*VerifyPasswordCommandResponse, error) {
-	var noMatchRules []domain.RuleEnum
+	noMatchRules := []domain.RuleEnum{}
 	for _, rule := range params.Rules {
 		var err error
 

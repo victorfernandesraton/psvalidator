@@ -9,11 +9,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "3000"
-	}
+func ServerFactory() *echo.Echo {
+
 	e := echo.New()
 	verifyCommand := &command.VerifyPasswordCommand{}
 	verifyHttpController := infra.VerifyHttpController{
@@ -25,5 +22,14 @@ func main() {
 
 	e.POST("/verify", verifyHttpController.Handler)
 
-	e.Logger.Fatal(e.Start(":3000"))
+	return e
+}
+
+func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
+	server := ServerFactory()
+	server.Logger.Fatal(server.Start(":" + port))
 }

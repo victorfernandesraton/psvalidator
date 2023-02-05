@@ -35,3 +35,5 @@ docker-compose stop
 ```
 docker-compose run --rm unit-test
 ```
+
+OBS: No JSON do desafio está se usando o termo `noRepet`, se for considerar em ingês seria `noRepeat`, por isso fiz essa correção na implementação

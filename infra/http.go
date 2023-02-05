@@ -22,7 +22,7 @@ type VerifyBodyRule struct {
 
 type VerifyBody struct {
 	Password string           `json:"password"`
-	Rules    []VerifyBodyRule `json:"rules,omitempty"`
+	Rules    []VerifyBodyRule `json:"rules"`
 }
 
 func RuleForObject(rule *VerifyBodyRule) *domain.Rule {
@@ -49,6 +49,7 @@ func (ctr *VerifyHttpController) Handler(c echo.Context) error {
 		Password: body.Password,
 		Rules:    rules,
 	})
+
 	if err != nil {
 		statusCode := http.StatusInternalServerError
 		if err == command.NotValidRuleError {
