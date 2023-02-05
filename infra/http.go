@@ -4,7 +4,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/victorfernandesraton/psvalidator/command"
 	"github.com/victorfernandesraton/psvalidator/domain"
-	"log"
 	"net/http"
 )
 
@@ -45,8 +44,6 @@ func (ctr *VerifyHttpController) Handler(c echo.Context) error {
 	for _, rule := range body.Rules {
 		rules = append(rules, RuleForObject(&rule))
 	}
-
-	log.Println(rules)
 
 	res, err := ctr.VerifyCommand.Execute(command.VerifyPasswordCommandParams{
 		Password: body.Password,

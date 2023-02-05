@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: .
+    ports:
+      - 3000:3000
+    environment:
+      PORT: 3000
+    volumes:
+      - .:/usr/app/
+    container_name: psvalidator-api
+
+  unit-test:
+    build:
+      context: .
+    command: go test -v ./...
+    volumes:
+      - .:/usr/app/
+    container_name: psvalidator-unit-test
