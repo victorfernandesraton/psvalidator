@@ -17,7 +17,7 @@ type VerifyPasswordCommandParams struct {
 
 type VerifyPasswordCommandResponse struct {
 	Verify  bool
-	NoMatch []domain.RuleEnum
+	NoMatch []string
 }
 
 func (c *VerifyPasswordCommand) Execute(params VerifyPasswordCommandParams) (*VerifyPasswordCommandResponse, error) {
