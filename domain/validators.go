@@ -1,17 +1,7 @@
 package domain
 
 import (
-	"errors"
 	"regexp"
-)
-
-var (
-	LoweError             = errors.New("not valid minimun lowercase rule")
-	UpperError            = errors.New("not valid minimun uppercase rule")
-	DigitError            = errors.New("not valid minimun digit rule")
-	SpecialCharacterError = errors.New("not valid minimun special character rule")
-	SizeError             = errors.New("not valid minimun size rule")
-	RepeatError           = errors.New("not valid repeat rule")
 )
 
 func MinSize(s string, min int) error {

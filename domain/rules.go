@@ -1,5 +1,7 @@
 package domain
 
+import "errors"
+
 type RuleEnum = string
 
 const (
@@ -16,6 +18,15 @@ const (
 	upperCaseRegex        = "[A-Z]"
 	digitCharacterRegex   = "[0-9]"
 	specialCharacterRegex = "[^[A-Za-zÀ-ȕ\\d\\s]"
+)
+
+var (
+	LoweError             = errors.New("not valid minimun lowercase rule")
+	UpperError            = errors.New("not valid minimun uppercase rule")
+	DigitError            = errors.New("not valid minimun digit rule")
+	SpecialCharacterError = errors.New("not valid minimun special character rule")
+	SizeError             = errors.New("not valid minimun size rule")
+	RepeatError           = errors.New("not valid repeat rule")
 )
 
 var RuleErrors = map[RuleEnum]error{
