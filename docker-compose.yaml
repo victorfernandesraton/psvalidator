@@ -13,9 +13,9 @@ services:
     container_name: psvalidator-api
 
   unit-test:
-    build:
-      context: .
+    image: golang:1.20
     command: go test -v ./...
     volumes:
-      - .:/usr/app/
+      - .:/usr/app
+    working_dir: /usr/app
     container_name: psvalidator-unit-test

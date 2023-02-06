@@ -2,6 +2,7 @@ package command
 
 import (
 	"errors"
+
 	"github.com/victorfernandesraton/psvalidator/domain"
 )
 
@@ -25,7 +26,7 @@ func (c *VerifyPasswordCommand) Execute(params VerifyPasswordCommandParams) (*Ve
 	for _, rule := range params.Rules {
 		var err error
 
-		switch rule.Type {
+		switch rule.Rule {
 		case domain.SizeRule:
 			err = domain.MinSize(params.Password, rule.Value)
 		case domain.LowerRule:
@@ -51,7 +52,7 @@ func (c *VerifyPasswordCommand) Execute(params VerifyPasswordCommandParams) (*Ve
 			if !errorInRules {
 				return nil, err
 			}
-			noMatchRules = append(noMatchRules, rule.Type)
+			noMatchRules = append(noMatchRules, rule.Rule)
 		}
 	}
 

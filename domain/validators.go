@@ -22,39 +22,39 @@ func MinSize(s string, min int) error {
 }
 
 func minCase(s string, rule *Rule) error {
-	regex, err := regexp.Compile(RuleRegexp[rule.Type])
+	regex, err := regexp.Compile(RuleRegexp[rule.Rule])
 	if err != nil {
 		return err
 	}
 	matches := regex.FindAllStringSubmatch(s, -1)
 
 	if len(matches) < rule.Value {
-		return RuleErrors[rule.Type]
+		return RuleErrors[rule.Rule]
 	}
 	return nil
 }
 
 func MinUpperCase(s string, min int) error {
 	return minCase(s, &Rule{
-		Type:  UpperRule,
+		Rule:  UpperRule,
 		Value: min,
 	})
 }
 func MinLowerCase(s string, min int) error {
 	return minCase(s, &Rule{
-		Type:  LowerRule,
+		Rule:  LowerRule,
 		Value: min,
 	})
 }
 func MinDigit(s string, min int) error {
 	return minCase(s, &Rule{
-		Type:  DigitRule,
+		Rule:  DigitRule,
 		Value: min,
 	})
 }
 func MinSpecialChars(s string, min int) error {
 	return minCase(s, &Rule{
-		Type:  SpecialRule,
+		Rule:  SpecialRule,
 		Value: min,
 	})
 }

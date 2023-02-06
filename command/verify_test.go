@@ -1,9 +1,10 @@
 package command_test
 
 import (
+	"testing"
+
 	"github.com/victorfernandesraton/psvalidator/command"
 	"github.com/victorfernandesraton/psvalidator/domain"
-	"testing"
 )
 
 var stub = &command.VerifyPasswordCommand{}
@@ -21,19 +22,19 @@ func TestVerifyPasswordCommand_Execute(t *testing.T) {
 				Password: "TesteSenhaForte!123&",
 				Rules: []*domain.Rule{
 					{
-						Type:  domain.SizeRule,
+						Rule:  domain.SizeRule,
 						Value: 8,
 					},
 					{
-						Type:  domain.SpecialRule,
+						Rule:  domain.SpecialRule,
 						Value: 2,
 					},
 					{
-						Type:  domain.RepeatRule,
+						Rule:  domain.RepeatRule,
 						Value: 0,
 					},
 					{
-						Type:  domain.DigitRule,
+						Rule:  domain.DigitRule,
 						Value: 4,
 					},
 				},
@@ -58,19 +59,19 @@ func TestVerifyPasswordCommand_Execute(t *testing.T) {
 				Password: "",
 				Rules: []*domain.Rule{
 					{
-						Type:  domain.SizeRule,
+						Rule:  domain.SizeRule,
 						Value: 8,
 					},
 					{
-						Type:  domain.SpecialRule,
+						Rule:  domain.SpecialRule,
 						Value: 2,
 					},
 					{
-						Type:  domain.RepeatRule,
+						Rule:  domain.RepeatRule,
 						Value: 0,
 					},
 					{
-						Type:  domain.DigitRule,
+						Rule:  domain.DigitRule,
 						Value: 4,
 					},
 				},
@@ -86,19 +87,19 @@ func TestVerifyPasswordCommand_Execute(t *testing.T) {
 				Password: "testeSeenhaForte!123&",
 				Rules: []*domain.Rule{
 					{
-						Type:  domain.SizeRule,
+						Rule:  domain.SizeRule,
 						Value: 8,
 					},
 					{
-						Type:  domain.SpecialRule,
+						Rule:  domain.SpecialRule,
 						Value: 2,
 					},
 					{
-						Type:  domain.RepeatRule,
+						Rule:  domain.RepeatRule,
 						Value: 0,
 					},
 					{
-						Type:  domain.DigitRule,
+						Rule:  domain.DigitRule,
 						Value: 4,
 					},
 				},
@@ -114,11 +115,11 @@ func TestVerifyPasswordCommand_Execute(t *testing.T) {
 				Password: "testeSeenhaForte!123&",
 				Rules: []*domain.Rule{
 					{
-						Type:  "invalidRule",
+						Rule:  "invalidRule",
 						Value: 8,
 					},
 					{
-						Type:  domain.DigitRule,
+						Rule:  domain.DigitRule,
 						Value: 4,
 					},
 				},

@@ -35,6 +35,6 @@ var RuleRegexp = map[RuleEnum]string{
 }
 
 type Rule struct {
-	Type  RuleEnum `json:"rule"`
+	Rule  RuleEnum `json:"rule"`
 	Value int      `json:"value"`
 }
